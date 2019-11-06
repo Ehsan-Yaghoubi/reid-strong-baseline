@@ -118,12 +118,8 @@ def train(cfg):
 
 def main():
     parser = argparse.ArgumentParser(description="ReID Baseline Training")
-    parser.add_argument(
-        "--config_file", default="", help="path to config file", type=str
-    )
-    parser.add_argument("opts", help="Modify config options using the command-line", default=None,
-                        nargs=argparse.REMAINDER)
-
+    parser.add_argument( "--config_file", default="../configs/softmax_triplet.yml", help="path to config file", type=str )
+    parser.add_argument("opts", help="Modify config options using the command-line", default=None, nargs=argparse.REMAINDER)
     args = parser.parse_args()
 
     num_gpus = int(os.environ["WORLD_SIZE"]) if "WORLD_SIZE" in os.environ else 1

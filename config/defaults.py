@@ -15,7 +15,7 @@ from yacs.config import CfgNode as CN
 # -----------------------------------------------------------------------------
 
 _C = CN()
-
+Dataset_directory = "/media/ehsan/HDD2TB/PersonReIdentification/DATASET_Person_Reidentification"
 _C.MODEL = CN()
 # Using cuda or cpu for training
 _C.MODEL.DEVICE = "cuda"
@@ -70,7 +70,7 @@ _C.DATASETS = CN()
 # List of the dataset names for training, as present in paths_catalog.py
 _C.DATASETS.NAMES = ('market1501')
 # Root directory where datasets should be used (and downloaded if not found)
-_C.DATASETS.ROOT_DIR = ('./data')
+_C.DATASETS.ROOT_DIR = (Dataset_directory)
 
 # -----------------------------------------------------------------------------
 # DataLoader
@@ -158,4 +158,4 @@ _C.TEST.FEAT_NORM = 'yes'
 # Misc options
 # ---------------------------------------------------------------------------- #
 # Path to checkpoint and saved log of trained model
-_C.OUTPUT_DIR = ""
+_C.OUTPUT_DIR = "RESULTS"
