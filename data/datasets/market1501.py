@@ -34,9 +34,9 @@ class Market1501(BaseImageDataset):
 
         self._check_before_run()
 
-        train = self._process_dir(self.train_dir, relabel=True)
-        query = self._process_dir(self.query_dir, relabel=False)
-        gallery = self._process_dir(self.gallery_dir, relabel=False)
+        train = self._process_dir(dir_path = self.train_dir, relabel=True)
+        query = self._process_dir(dir_path = self.query_dir, relabel=False)
+        gallery = self._process_dir(dir_path = self.gallery_dir, relabel=False)
 
         if verbose:
             print("=> Market1501 loaded")
@@ -63,7 +63,7 @@ class Market1501(BaseImageDataset):
 
     def _process_dir(self, dir_path, relabel=False):
         img_paths = glob.glob(osp.join(dir_path, '*.jpg'))
-        pattern = re.compile(r'([-\d]+)_c(\d)')
+        pattern = re.compile(r'([-\d]+)_c(\d)') # 0022_c3s1_044651_01.jpg
 
         pid_container = set()
         for img_path in img_paths:
@@ -72,7 +72,7 @@ class Market1501(BaseImageDataset):
             pid_container.add(pid)
         pid2label = {pid: label for label, pid in enumerate(pid_container)}
 
-        dataset = []
+        _dataset = []
         for img_path in img_paths:
             pid, camid = map(int, pattern.search(img_path).groups())
             if pid == -1: continue  # junk images are just ignored
@@ -80,6 +80,6 @@ class Market1501(BaseImageDataset):
             assert 1 <= camid <= 6
             camid -= 1  # index starts from 0
             if relabel: pid = pid2label[pid]
-            dataset.append((img_path, pid, camid))
+            _dataset.append((img_path, pid, camid))
 
-        return dataset
+        return _dataset

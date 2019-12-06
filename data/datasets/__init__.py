@@ -8,6 +8,7 @@ from .dukemtmcreid import DukeMTMCreID
 from .market1501 import Market1501
 from .msmt17 import MSMT17
 from .veri import VeRi
+from .RAP import RAP
 from .dataset_loader import ImageDataset
 
 __factory = {
@@ -16,6 +17,7 @@ __factory = {
     'dukemtmc': DukeMTMCreID,
     'msmt17': MSMT17,
     'veri': VeRi,
+    'RAP': RAP,
 }
 
 
@@ -25,5 +27,6 @@ def get_names():
 
 def init_dataset(name, *args, **kwargs):
     if name not in __factory.keys():
+        print(__factory.keys())
         raise KeyError("Unknown datasets: {}".format(name))
     return __factory[name](*args, **kwargs)

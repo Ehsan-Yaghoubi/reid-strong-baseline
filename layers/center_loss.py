@@ -15,7 +15,7 @@ class CenterLoss(nn.Module):
         feat_dim (int): feature dimension.
     """
 
-    def __init__(self, num_classes=751, feat_dim=2048, use_gpu=True):
+    def __init__(self, num_classes, feat_dim, use_gpu=True):
         super(CenterLoss, self).__init__()
         self.num_classes = num_classes
         self.feat_dim = feat_dim
@@ -35,6 +35,7 @@ class CenterLoss(nn.Module):
         assert x.size(0) == labels.size(0), "features.size(0) is not equal to labels.size(0)"
 
         batch_size = x.size(0)
+        print(">>>\n\tbatch_size: ",batch_size)
         distmat = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(batch_size, self.num_classes) + \
                   torch.pow(self.centers, 2).sum(dim=1, keepdim=True).expand(self.num_classes, batch_size).t()
         distmat.addmm_(1, -2, x, self.centers.t())
@@ -58,7 +59,7 @@ class CenterLoss(nn.Module):
 
 if __name__ == '__main__':
     use_gpu = False
-    center_loss = CenterLoss(use_gpu=use_gpu)
+    center_loss = CenterLoss(num_classes=751, feat_dim=2048, use_gpu=use_gpu)
     features = torch.rand(16, 2048)
     targets = torch.Tensor([0, 1, 2, 3, 2, 3, 1, 4, 5, 3, 2, 1, 0, 0, 5, 4]).long()
     if use_gpu:

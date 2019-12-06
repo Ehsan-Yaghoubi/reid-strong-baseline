@@ -15,7 +15,8 @@ from yacs.config import CfgNode as CN
 # -----------------------------------------------------------------------------
 
 _C = CN()
-Dataset_directory = "/media/ehsan/HDD2TB/PersonReIdentification/DATASET_Person_Reidentification"
+Dataset_directory = "/media/ehsan/48BE4782BE476810/AA_GITHUP/Anchor_Level_Paper/RAP_resized_imgs"
+#### Dataset_directory = "/media/ehsan/HDD2TB/PersonReIdentification/DATASET_Person_Reidentification"
 _C.MODEL = CN()
 # Using cuda or cpu for training
 _C.MODEL.DEVICE = "cuda"
@@ -49,9 +50,11 @@ _C.MODEL.IF_LABELSMOOTH = 'on'
 # -----------------------------------------------------------------------------
 _C.INPUT = CN()
 # Size of the image during training
-_C.INPUT.SIZE_TRAIN = [384, 128]
+_C.INPUT.SIZE_TRAIN = [128, 128]
+#### _C.INPUT.SIZE_TRAIN = [384, 128]
 # Size of the image during test
-_C.INPUT.SIZE_TEST = [384, 128]
+_C.INPUT.SIZE_TEST = [128, 128]
+#### _C.INPUT.SIZE_TEST = [384, 128]
 # Random probability for image horizontal flip
 _C.INPUT.PROB = 0.5
 # Random probability for random erasing
@@ -68,7 +71,8 @@ _C.INPUT.PADDING = 10
 # -----------------------------------------------------------------------------
 _C.DATASETS = CN()
 # List of the dataset names for training, as present in paths_catalog.py
-_C.DATASETS.NAMES = ('market1501')
+_C.DATASETS.NAMES = ('RAP')
+#### _C.DATASETS.NAMES = ('market1501')
 # Root directory where datasets should be used (and downloaded if not found)
 _C.DATASETS.ROOT_DIR = (Dataset_directory)
 
@@ -79,9 +83,9 @@ _C.DATALOADER = CN()
 # Number of data loading threads
 _C.DATALOADER.NUM_WORKERS = 8
 # Sampler for data loading
-_C.DATALOADER.SAMPLER = 'softmax'
+_C.DATALOADER.SAMPLER = 'triplet'
 # Number of instance for one batch
-_C.DATALOADER.NUM_INSTANCE = 16
+_C.DATALOADER.NUM_INSTANCE = 8
 
 # ---------------------------------------------------------------------------- #
 # Solver
@@ -158,4 +162,4 @@ _C.TEST.FEAT_NORM = 'yes'
 # Misc options
 # ---------------------------------------------------------------------------- #
 # Path to checkpoint and saved log of trained model
-_C.OUTPUT_DIR = "RESULTS"
+_C.OUTPUT_DIR = "reid_on_RAP_RESULTS"

@@ -76,7 +76,7 @@ class Bottleneck_IBN(nn.Module):
 
 class ResNet_IBN(nn.Module):
 
-    def __init__(self, last_stride, block, layers, num_classes=1000):
+    def __init__(self, last_stride, block, layers, num_classes):
         scale = 64
         self.inplanes = scale
         super(ResNet_IBN, self).__init__()

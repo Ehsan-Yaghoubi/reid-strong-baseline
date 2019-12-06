@@ -28,7 +28,7 @@ def train(cfg):
 
     # prepare model
     model = build_model(cfg, num_classes)
-
+    print(model)
     if cfg.MODEL.IF_WITH_CENTER == 'no':
         print('Train without center loss, the loss type is', cfg.MODEL.METRIC_LOSS_TYPE)
         optimizer = make_optimizer(cfg, model)
@@ -67,6 +67,8 @@ def train(cfg):
             num_query,
             start_epoch     # add for using self trained model
         )
+        input_sizee = (3,cfg.INPUT.SIZE_TRAIN[0],cfg.INPUT.SIZE_TRAIN[1])
+        print("input_sizee", input_sizee)
     elif cfg.MODEL.IF_WITH_CENTER == 'yes':
         print('Train with center loss, the loss type is', cfg.MODEL.METRIC_LOSS_TYPE)
         loss_func, center_criterion = make_loss_with_center(cfg, num_classes)  # modified by gu

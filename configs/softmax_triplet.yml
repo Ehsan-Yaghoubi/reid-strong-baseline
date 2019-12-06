@@ -9,14 +9,14 @@ MODEL:
 
 
 INPUT:
-  SIZE_TRAIN: [256, 128]
-  SIZE_TEST: [256, 128]
+  SIZE_TRAIN: [128, 128]
+  SIZE_TEST: [128, 128]
   PROB: 0.5 # random horizontal flip
   RE_PROB: 0.5 # random erasing
   PADDING: 10
 
 DATASETS:
-  NAMES: ('market1501')
+  NAMES: ('RAP')
 
 DATALOADER:
   SAMPLER: 'softmax_triplet'
@@ -62,5 +62,5 @@ TEST:
   NECK_FEAT: 'after'
   FEAT_NORM: 'yes'
 
-OUTPUT_DIR: "/media/ehsan/HDD2TB/PersonReIdentification/reid-strong-baseline/RESULTS"
+OUTPUT_DIR: "/media/ehsan/HDD2TB/PersonReIdentification/reid-strong-baseline/reid_on_RAP_RESULTS"
 
