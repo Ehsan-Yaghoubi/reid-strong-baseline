@@ -5,7 +5,7 @@
 """
 
 import torchvision.transforms as T
-
+from data.transforms.MyCompose import my_compose
 from .transforms import RandomErasing
 
 

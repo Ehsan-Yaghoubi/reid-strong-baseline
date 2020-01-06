@@ -28,7 +28,7 @@ def train(cfg):
 
     # prepare model
     model = build_model(cfg, num_classes)
-    print(model)
+    #print(model)
     if cfg.MODEL.IF_WITH_CENTER == 'no':
         print('Train without center loss, the loss type is', cfg.MODEL.METRIC_LOSS_TYPE)
         optimizer = make_optimizer(cfg, model)
@@ -43,8 +43,8 @@ def train(cfg):
             print('Start epoch:', start_epoch)
             path_to_optimizer = cfg.MODEL.PRETRAIN_PATH.replace('model', 'optimizer')
             print('Path to the checkpoint of optimizer:', path_to_optimizer)
-            model.load_state_dict(torch.load(cfg.MODEL.PRETRAIN_PATH))
-            optimizer.load_state_dict(torch.load(path_to_optimizer))
+            model=torch.load(cfg.MODEL.PRETRAIN_PATH) # model.load_state_dict(torch.load(cfg.MODEL.PRETRAIN_PATH))
+            optimizer=torch.load(path_to_optimizer) # optimizer.load_state_dict(torch.load(path_to_optimizer))
             scheduler = WarmupMultiStepLR(optimizer, cfg.SOLVER.STEPS, cfg.SOLVER.GAMMA, cfg.SOLVER.WARMUP_FACTOR,
                                           cfg.SOLVER.WARMUP_ITERS, cfg.SOLVER.WARMUP_METHOD, start_epoch)
         elif cfg.MODEL.PRETRAIN_CHOICE == 'imagenet':

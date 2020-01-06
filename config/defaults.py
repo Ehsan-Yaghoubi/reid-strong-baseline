@@ -1,5 +1,7 @@
 from yacs.config import CfgNode as CN
-
+import datetime
+import os
+from RAP_script.generate_synthetic_images import is_compatible_area
 # -----------------------------------------------------------------------------
 # Convention about Training / Test specific parameters
 # -----------------------------------------------------------------------------
@@ -15,7 +17,9 @@ from yacs.config import CfgNode as CN
 # -----------------------------------------------------------------------------
 
 _C = CN()
-Dataset_directory = "/media/ehsan/48BE4782BE476810/AA_GITHUP/Anchor_Level_Paper/RAP_resized_imgs"
+constraint_funcs = [is_compatible_area]
+Dataset_directory = '/media/ehsan/48BE4782BE476810/AA_GITHUP/Anchor_Level_Paper'
+rap_mat_file = '/media/ehsan/48BE4782BE476810/AA_GITHUP/Anchor_Level_Paper/Anchor_level_rap/rap_annotations/RAP_annotation.mat'
 #### Dataset_directory = "/media/ehsan/HDD2TB/PersonReIdentification/DATASET_Person_Reidentification"
 _C.MODEL = CN()
 # Using cuda or cpu for training
@@ -81,7 +85,7 @@ _C.DATASETS.ROOT_DIR = (Dataset_directory)
 # -----------------------------------------------------------------------------
 _C.DATALOADER = CN()
 # Number of data loading threads
-_C.DATALOADER.NUM_WORKERS = 8
+_C.DATALOADER.NUM_WORKERS = 5
 # Sampler for data loading
 _C.DATALOADER.SAMPLER = 'triplet'
 # Number of instance for one batch
@@ -148,7 +152,7 @@ _C.SOLVER.IMS_PER_BATCH = 64
 # see 2 images per batch
 _C.TEST = CN()
 # Number of images per batch during test
-_C.TEST.IMS_PER_BATCH = 128
+_C.TEST.IMS_PER_BATCH = 64
 # If test with re-ranking, options: 'yes','no'
 _C.TEST.RE_RANKING = 'no'
 # Path to trained model
@@ -162,4 +166,9 @@ _C.TEST.FEAT_NORM = 'yes'
 # Misc options
 # ---------------------------------------------------------------------------- #
 # Path to checkpoint and saved log of trained model
-_C.OUTPUT_DIR = "reid_on_RAP_RESULTS"
+now = datetime.datetime.now()
+now = now.strftime("%Y_%m_%d_%H%M")
+up_current_dir = os.path.dirname(os.getcwd())
+path_to_results = os.path.join(up_current_dir,"RESULTS", now)
+os.makedirs(path_to_results, exist_ok=True)
+_C.OUTPUT_DIR = path_to_results
