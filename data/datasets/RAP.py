@@ -24,13 +24,15 @@ class RAP (BaseImageDataset):
         self.dataset_dir = os.path.join(root, self.dataset_dir)
         self.rap_mat_file = os.path.join(root, self.rap_mat_file)
         self._check_before_run()
+        self.rap_data = load_rap_dataset(rap_attributes_filepath=self.rap_mat_file, rap_keypoints_json=self.rap_json_data,
+                                    load_from_file=True)
 
         train, query, gallery, rap_data = self._process_dir(self.rap_mat_file, self.dataset_dir, relabel= True)
 
         self.train = train
         self.query = query
         self.gallery = gallery
-        self.rap_data = rap_data
+
 
 
         if verbose:
@@ -54,7 +56,7 @@ class RAP (BaseImageDataset):
 
     def _process_dir(self, rap_mat_file, data_dir, relabel):
         image_names, pids, train_indices, gallery_indices, query_indices=load_reid_data(rap_mat_file)
-        rap_data = load_rap_dataset(rap_attributes_filepath=self.rap_mat_file, rap_keypoints_json=self.rap_json_data, load_from_file=True)
+        #rap_data = load_rap_dataset(rap_attributes_filepath=self.rap_mat_file, rap_keypoints_json=self.rap_json_data, load_from_file=True)
         pid_container = set()
         for index, IMG_index1 in enumerate(train_indices):
             person_id = pids[IMG_index1-1]
@@ -71,7 +73,7 @@ class RAP (BaseImageDataset):
                 person_id = pids[IMG_index1-1]
                 if person_id == -1: continue  # junk images are just ignored
                 img_name = image_names[IMG_index1-1]
-                img_labels = rap_data[img_name]['attrs']
+                img_labels = self.rap_data[img_name]['attrs']
                 img_full_path = os.path.join(data_dir, img_name)
                 camera = img_name.split("-")[0] # e.g. ['CAM01', '2014', '02', '15', '20140215161032', '20140215162620', 'tarid0', 'frame218', 'line1.png']
                 camera_id = int(re.findall('\d+',camera)[0])
@@ -98,7 +100,7 @@ class RAP (BaseImageDataset):
                 person_id = pids[IMG_index2-1]
                 if person_id == -1: continue  # junk images are just ignored
                 img_name = image_names[IMG_index2-1]
-                img_labels = rap_data[img_name]['attrs']
+                img_labels = self.rap_data[img_name]['attrs']
                 img_full_path = os.path.join(data_dir, img_name)
                 camera = img_name.split("-")[0] # e.g. ['CAM01', '2014', '02', '15', '20140215161032', '20140215162620', 'tarid0', 'frame218', 'line1.png']
                 camera_id = int(re.findall('\d+',camera)[0])
@@ -124,7 +126,7 @@ class RAP (BaseImageDataset):
                 person_id = pids[IMG_index3-1]
                 if person_id == -1: continue  # junk images are just ignored
                 img_name = image_names[IMG_index3-1]
-                img_labels = rap_data[img_name]['attrs']
+                img_labels = self.rap_data[img_name]['attrs']
                 img_full_path = os.path.join(data_dir, img_name)
                 camera = img_name.split("-")[0] # e.g. ['CAM01', '2014', '02', '15', '20140215161032', '20140215162620', 'tarid0', 'frame218', 'line1.png']
                 camera_id = int(re.findall('\d+',camera)[0])
@@ -141,5 +143,5 @@ class RAP (BaseImageDataset):
         # print(">>>>>> Number of gallery IDs: ",len(set(ids)))
         # print(">>>>>> Number of gallery Camera IDs: ",len(set(cam_ids)))
 
-        return  train, query, gallery, rap_data
+        return  train, query, gallery, self.rap_data
 

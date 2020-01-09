@@ -37,7 +37,7 @@ class ImageDataset(Dataset):
         self.rap_data_ = rap_data_
         self.is_train = is_train
         self.swap_roi_rou=swap_roi_rou
-        self.image_obj = part_substitution(probability=0.9)
+        self.image_obj = part_substitution(probability=0.7, rap_data__=rap_data_,constraint_funcs=None, other_attrs=None)
 
     def __len__(self):
         return len(self.dataset)
@@ -50,7 +50,7 @@ class ImageDataset(Dataset):
             if self.is_train:
                 if self.swap_roi_rou: # Augment the data with exchanging the region of interest with region of uninterest?
                     while True:
-                        imge = self.image_obj(current_image_path=img_path, rap_data__=self.rap_data_, constraint_funcs=None)
+                        imge = self.image_obj(current_image_path=img_path)
                         if imge is not None:
                             break
 
@@ -64,8 +64,7 @@ class ImageDataset(Dataset):
             else: # validation of test phase
                 if self.swap_roi_rou:  # Augment the data with exchanging the region of interest with region of uninterest?
                     while True:
-                        imge = self.image_obj(current_image_path=img_path, rap_data__=self.rap_data_,
-                                              constraint_funcs=None)
+                        imge = self.image_obj(current_image_path=img_path)
                         if imge is not None:
                             break
 

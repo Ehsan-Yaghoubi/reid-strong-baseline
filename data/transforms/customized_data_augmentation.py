@@ -22,21 +22,25 @@ def read_image(img_path):
 
 class part_substitution(object):
 
-    def __init__(self, probability):
+    def __init__(self, probability, rap_data__,constraint_funcs=None, other_attrs=None):
         self.probability = probability
+        self.rap_data__ = rap_data__
+        self.constraint_funcs=constraint_funcs
+        self.other_attrs=other_attrs
 
-    def __call__(self, current_image_path, rap_data__, constraint_funcs=None):
+    def __call__(self, current_image_path):
         img = read_image(current_image_path)
         if random.uniform(0, 1) >= self.probability:
             return img
-        img_name = current_image_path.split("/")[-1]
+
         try:
             try:
                 try:
+                    img_name = current_image_path.split("/")[-1]
                     img = generate_images_from_this_image(image_name=img_name,
-                                                          rap_data___=rap_data__,
-                                                          constraint_functions=constraint_funcs,
-                                                          other_attrs=None)
+                                                          rap_data___=self.rap_data__,
+                                                          constraint_functions=self.constraint_funcs,
+                                                          other_attrs=self.other_attrs)
                 except KeyError:
                     #print("keyerror: ", img_name)
                     return None
