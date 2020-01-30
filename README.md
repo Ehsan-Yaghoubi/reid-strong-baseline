@@ -12,10 +12,10 @@ Paper link at arxiv [[https://to_be_inserted_soon]](https://arxiv.org/)
 
 ## Examples of generated images when developing the attention on upper-body (First two rows)/full-body (3th and 4th rows)
 <div align=center>
-<img src='imgs/samples1.png' width='800'>
+<img src='imgs/samples1.png' width='900'>
 </div>
 <div align=center>
-<img src='imgs/samples2.png' width='750'>
+<img src='imgs/samples2.png' width='700'>
 </div>
 
 ## Comparison results on the Richly Annotated Pedestrian (RAP) dataset is as follows:
