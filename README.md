@@ -8,7 +8,7 @@ Paper link at arxiv [[https://to_be_inserted_soon]](https://arxiv.org/)
 
 ## The proposed attention mechanism:
 <div align=center>
-<img src='imgs/attention.png' width='400'>
+<img src='imgs/attention.png' width='500'>
 </div>
 
 ## Samples:
@@ -18,7 +18,7 @@ When enabling the attention on the upper-body region, fake samples are different
 <img src='imgs/samples1.png' width='800'>
 </div>
 <div align=center>
-<img src='imgs/samples2.png' width='500'>
+<img src='imgs/samples2.png' width='580'>
 </div>
 
 ## Comparison results on the Richly Annotated Pedestrian (RAP) dataset is as follows:
