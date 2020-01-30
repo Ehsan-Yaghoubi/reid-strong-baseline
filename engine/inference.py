@@ -71,5 +71,5 @@ def inference(
     cmc, mAP = evaluator.state.metrics['r1_mAP']
     logger.info('Validation Results')
     logger.info("mAP: {:.1%}".format(mAP))
-    for r in [1, 5, 10]:
+    for r in [1, 5, 10, 50]:
         logger.info("CMC curve, Rank-{:<3}:{:.1%}".format(r, cmc[r - 1]))

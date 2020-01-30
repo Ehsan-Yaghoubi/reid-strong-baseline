@@ -37,7 +37,7 @@ class ImageDataset(Dataset):
         self.rap_data_ = rap_data_
         self.is_train = is_train
         self.swap_roi_rou=swap_roi_rou
-        self.image_obj = part_substitution(probability=0.7, rap_data__=rap_data_,constraint_funcs=None, other_attrs=None)
+        self.image_obj = part_substitution(probability=0.3, rap_data__=rap_data_,constraint_funcs=None, other_attrs=None)
 
     def __len__(self):
         return len(self.dataset)

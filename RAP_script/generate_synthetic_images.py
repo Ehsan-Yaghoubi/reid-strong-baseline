@@ -184,58 +184,40 @@ def replace_head_torso_area(img1, mask1, keypoints1, attrs1,
     return result_image
 
 
-def replace_background(img1, mask1, keypoints1, attrs1,
-                       img2, mask2, keypoints2, attrs2):
-    whole_body_rect1 = rap.get_whole_body_bbox(attrs1)
-    whole_body_rect2 = rap.get_whole_body_bbox(attrs2)
-
-    whole_body_img1 = utils.get_roi(img1, whole_body_rect1)
-    whole_body_img2 = utils.get_roi(img2, whole_body_rect2)
-
-    whole_body_mask1 = utils.get_mask_for_roi(img=mask1, rect=whole_body_rect1)
-    whole_body_mask2 = utils.get_mask_for_roi(img=mask2, rect=whole_body_rect2)
-
+def replace_background(img1, mask1,
+                       img2, mask2):
 
     # @todo:  can add here multiple constraint functions on masks (like orientation, center etc).
     enable_constraints_ht = False
     if enable_constraints_ht:
-        if not is_compatible_iou(None, None, whole_body_mask1, whole_body_mask2, None, None, None, None):
+        if not is_compatible_iou(None, None, mask1, mask2, None, None, None, None):
             print('Incompatible head torso masks by IOU')
             return None
 
-        if not is_compatible_area(None, None, whole_body_mask1, whole_body_mask2, None, None, None, None, th_area=0.5):
+        if not is_compatible_area(None, None, mask1, mask2, None, None, None, None, th_area=0.5):
             print('Incompatible head torso masks by area')
             return None
-    # end
 
-    # cv2.imshow('ht', whole_body_img1)
-    # cv2.imshow('htm', whole_body_mask1)
-    # cv2.waitKey()
+    # x1, y1, w1, h1 = cv2.boundingRect(mask1)
+    x2, y2, w2, h2 = cv2.boundingRect(mask2)
+    # whole_body_rect1 = [x1, y1, w1, h1]
+    whole_body_rect2 = [x2, y2, w2, h2]
 
     result_image = np.copy(img2)
-    r = remove_area(result_image, whole_body_rect1, whole_body_mask1)
-    result_image = utils.copy_roi(src=r, dst=result_image, roi=whole_body_rect1)
-
-    ht_img1 = img1[whole_body_rect1[1]: whole_body_rect1[1] + whole_body_rect1[3],
-              whole_body_rect1[0]: whole_body_rect1[0] + whole_body_rect1[2]]
-
-    mask_img1 = mask1[whole_body_rect1[1]: whole_body_rect1[1] + whole_body_rect1[3],
-                whole_body_rect1[0]: whole_body_rect1[0] + whole_body_rect1[2]]
-
-    # if ht_img2 is None or mask_img2 is None or result_image is None:
-    # return None
-
-    ht_img1 = cv2.resize(src=ht_img1, dsize=(whole_body_rect2[2], whole_body_rect2[3]))
-    mask_img1 = cv2.resize(src=mask_img1, dsize=(whole_body_rect2[2], whole_body_rect2[3]))
-    mask_img1 = cv2.cvtColor(src=mask_img1, code=cv2.COLOR_GRAY2BGR)
+    result_image = remove_area(result_image, whole_body_rect2, mask2)
+    # cv2.imshow('result_image_2', result_image)
+    mask_img1 = cv2.cvtColor(src=mask1, code=cv2.COLOR_GRAY2BGR)
     mask_img1 = mask_img1.astype(np.bool)
 
-    np.copyto(dst=result_image[whole_body_rect2[1]: whole_body_rect2[1] + whole_body_rect2[3],
-                  whole_body_rect2[0]: whole_body_rect2[0] + whole_body_rect2[2]],
-              src=ht_img1,
+    np.copyto(dst=result_image,
+              src=img1,
               where=mask_img1,
               casting='unsafe')
 
+    # cv2.imshow('result_image_final', result_image)
+    # cv2.imshow('img2', img2)
+    # cv2.imshow('mask2', mask2)
+    # cv2.waitKey()
     return result_image
 # ---------------------------------------------------
 # constrain functions
@@ -333,7 +315,7 @@ def generate_syntethic_images(rap_data, num_images_to_generate, viewpoint = 1, o
     return
 
 def generate_images_from_this_image (image_name, rap_data___= None, constraint_functions= None, other_attrs=None):
-    tic = time.time()
+    #tic = time.time()
     num_images_to_generate = 1
     image_attrs = rap_data___[image_name]["attrs"] # get the attributes of this image
     viewpoint = image_attrs[rap.attr_viewpoint] # get the viewpoint attribute of this image
@@ -349,6 +331,7 @@ def generate_images_from_this_image (image_name, rap_data___= None, constraint_f
 
     target_images = list(target_images)
     generated_replaced_ht = None
+    _generated_replaced_background = None
     for idx in range(0, num_images_to_generate):
         #cv2.destroyAllWindows()
         img_name1 = image_name
@@ -386,9 +369,9 @@ def generate_images_from_this_image (image_name, rap_data___= None, constraint_f
         # generated_replaced_rect = replace_head_rect(img1, mask1, keypoints1, attr1,
         #                                             img2, mask2, keypoints2, attr2)
 
-        generated_replaced_ht = replace_head_torso_area(img1, mask1, keypoints1, attr1,
-                                                        img2, mask2, keypoints2, attr2)
+        #generated_replaced_ht = replace_head_torso_area(img1, mask1, keypoints1, attr1, img2, mask2, keypoints2, attr2)
 
+        _generated_replaced_background = replace_background(img1, mask1, img2, mask2)
 
         if generated_replaced_ht is None:
             num_images_to_generate += 1
@@ -408,9 +391,9 @@ def generate_images_from_this_image (image_name, rap_data___= None, constraint_f
         # display_img = cv2.hconcat(concat_images)
         # cv2.imshow('morphing', display_img)
         # cv2.waitKey()
-    toc = time.time()
-    print("elapsed = ", toc - tic)
-    return generated_replaced_ht
+    #toc = time.time()
+    #print("elapsed = ", toc - tic)
+    return _generated_replaced_background
 
 def generate_images_from_this_image_v2 (image_name, rap_data___= None, constraint_functions= None, other_attrs=None):
     num_images_to_generate = 1
@@ -427,7 +410,7 @@ def generate_images_from_this_image_v2 (image_name, rap_data___= None, constrain
                 target_images = target_images.intersection(set(images_with_attr))
 
     target_images = list(target_images)
-    generated_replaced_ht = None
+    _generated_replaced_background = None
     for idx in range(0, num_images_to_generate):
         cv2.destroyAllWindows()
         img_name1 = image_name
@@ -460,21 +443,20 @@ def generate_images_from_this_image_v2 (image_name, rap_data___= None, constrain
                     idx -= 1
                     continue
 
-        generated_replaced_area = replace_head_area(img1, mask1, keypoints1,
-                                                    img2, mask2, keypoints2)
-        generated_replaced_rect = replace_head_rect(img1, mask1, keypoints1, attr1,
-                                                    img2, mask2, keypoints2, attr2)
+        # generated_replaced_area = replace_head_area(img1, mask1, keypoints1,
+        #                                             img2, mask2, keypoints2)
+        # generated_replaced_rect = replace_head_rect(img1, mask1, keypoints1, attr1,
+        #                                             img2, mask2, keypoints2, attr2)
+        #
+        # generated_replaced_ht = replace_head_torso_area(img1, mask1, keypoints1, attr1,
+        #                                                 img2, mask2, keypoints2, attr2)
 
-        generated_replaced_ht = replace_head_torso_area(img1, mask1, keypoints1, attr1,
-                                                        img2, mask2, keypoints2, attr2)
-
-        generated_replaced_background = replace_background(img1, mask1, keypoints1, attr1,
-                                                           img2, mask2, keypoints2, attr2)
+        _generated_replaced_background = replace_background(img1, mask1, img2, mask2)
 
         # cv2.imshow('morphing1', generated_replaced_ht)
         # cv2.waitKey()
-        path = "/media/ehsan/48BE4782BE476810/AA_GITHUP/forked_reid_baseline/RESULTS"
-        cv2.imwrite(os.path.join(path,"{}_{}.jpg".format(img_name1,img_name2)), generated_replaced_ht)
+        #path = "/home/eshan/replication"
+        #cv2.imwrite(os.path.join(path,"{}_{}.jpg".format(img_name1,img_name2)), _generated_replaced_background)
 
         # if generated_replaced_background is None:
         #     num_images_to_generate += 1
@@ -495,24 +477,37 @@ def generate_images_from_this_image_v2 (image_name, rap_data___= None, constrain
         # cv2.imshow('morphing2', display_img)
         # cv2.waitKey()
 
-    return generated_replaced_ht
+    return _generated_replaced_background
 
 
 if __name__ == '__main__':
     rap_dataset = rap.load_rap_dataset(rap_attributes_filepath = rap.rap_attribute_annotations, rap_keypoints_json = rap.rap_keypoints_json, load_from_file= True)
     additional_attrs = {rap.attr_viewpoint : 111}
     constraint_funcs = [is_compatible_area]
-    num_images_to_generate = 2000
+    num_images_to_generate = 100
     #generate_syntethic_images(rap_dataset, num_images_to_generate, other_attrs=additional_attrs, constraint_functions=constraint_funcs)
 
     # rap_img_name = os.listdir("/media/ehsan/48BE4782BE476810/AA_GITHUP/Anchor_Level_Paper/RAP_resized_masks256x256")
     # for i, each_img_name in enumerate(rap_img_name):
-    each_img_name = "/media/ehsan/48BE4782BE476810/AA_GITHUP/Anchor_Level_Paper/RAP_resized_masks256x256/CAM16-2014-02-25-20140225151636-20140225152224-tarid149-frame2192-line1.png"
-    for i in range(2000):
+
+    ##################### todo: generate fake images from one image
+    Person1 = "CAM16-2014-02-25-20140225151636-20140225152224-tarid149-frame2192-line1.png"
+    Person2 = "CAM25-2014-04-22-20140422123345-20140422123909-tarid186-frame1483-line2.png"
+    Person3 = "CAM30-2014-04-22-20140422120203-20140422120739-tarid73-frame3423-line2.png"
+    Person4 = "CAM08-2014-03-26-20140326144149-20140326144741-tarid105-frame870-line1.png"
+    Person5 = "CAM01-2013-12-23-20131223122515-20131223123103-tarid7-frame1602-line1.png"
+    Person6 = "CAM22-2014-04-15-20140415112937-20140415113525-tarid63-frame1148-line1.png"
+    Person7 = "CAM22-2014-04-17-20140417132119-20140417132715-tarid92-frame1706-line2.png"
+    Person8 = "CAM22-2014-03-21-20140321153041-20140321153521-tarid381-frame1881-line1.png"
+    for i in range(50):
         try:
             try:
                 try:
-                    generate_images_from_this_image(each_img_name, rap_data___=rap_dataset, constraint_functions=None, other_attrs=additional_attrs)
+                    img = generate_images_from_this_image_v2(Person6, rap_data___=rap_dataset, constraint_functions=None, other_attrs=additional_attrs)
+                    path = "../RESULTS/PERSON6"
+                    os.makedirs(path,exist_ok=True)
+                    name = path + "/{}.jpg".format(i)
+                    cv2.imwrite(filename=name, img=img)
                     #generate_images_from_this_image_v2(image_name=each_img_name, rap_data___=rap_dataset, other_attrs=additional_attrs)
                     print(i)
                 except KeyError:

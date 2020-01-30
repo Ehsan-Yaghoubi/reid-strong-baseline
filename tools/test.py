@@ -23,8 +23,7 @@ from utils.logger import setup_logger
 def main():
     parser = argparse.ArgumentParser(description="ReID Baseline Inference")
     parser.add_argument(
-        "--config_file", default='/media/ehsan/HDD2TB/PersonReIdentification/reid-strong-baseline/configs/softmax_triplet.yml', help="path to config file", type=str
-    )
+        "--config_file", default='../configs/softmax_triplet.yml', help="path to config file", type=str)
     parser.add_argument("opts", help="Modify config options using the command-line", default=None,
                         nargs=argparse.REMAINDER)
 

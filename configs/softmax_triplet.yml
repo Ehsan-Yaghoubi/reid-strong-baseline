@@ -58,9 +58,9 @@ SOLVER:
 TEST:
   IMS_PER_BATCH: 128
   RE_RANKING: 'no'
-  WEIGHT: "path"
+  WEIGHT: "./Results_paper/TRAIN/fullbody/softmax_triplet_fullbody_background_0.5/resnet50_model_280.pth"
   NECK_FEAT: 'after'
   FEAT_NORM: 'yes'
 
-OUTPUT_DIR: "RESULTS/softmax_triplet_prob_0_9"
+OUTPUT_DIR: "RESULTS/test_fullbody_softmax_triplet_0.5"  # OUTPUT_DIR: "/home/haoluo/log/reid/market1501/softmax_bs64_256x128"
 

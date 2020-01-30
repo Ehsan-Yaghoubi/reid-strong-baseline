@@ -34,12 +34,14 @@ SOLVER:
   WARMUP_METHOD: 'linear'
 
   CHECKPOINT_PERIOD: 40
-  LOG_PERIOD: 20
-  EVAL_PERIOD: 20
+  LOG_PERIOD: 40
+  EVAL_PERIOD: 40
 
 TEST:
   IMS_PER_BATCH: 128
+  WEIGHT: "/Results_paper/TRAIN/fullbody/softmax_triplet_fullbody_background_0.3/resnet50_model_280.pth"
 
-OUTPUT_DIR: "RESULTS/softmax"  # OUTPUT_DIR: "/home/haoluo/log/reid/market1501/softmax_bs64_256x128"
+OUTPUT_DIR: "RESULTS/test_fullbody_softmax_0.3"  # OUTPUT_DIR: "/home/haoluo/log/reid/market1501/softmax_bs64_256x128"
+
 
 
