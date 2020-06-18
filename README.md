@@ -18,7 +18,7 @@ When enabling the attention on the upper-body region, fake samples are different
 <img src='imgs/samples2.png' width='580'>
 </div>
 
-## Comparison results on the Richly Annotated Pedestrian (RAP) dataset is as follows:
+## Comparison results on the Richly Annotated Pedestrian (RAP) dataset is as follows: Note that, we stopped training the modles when all of them reached the same loss value.
 <div align=center>
 <img src='imgs/comparison_chart.png' width='600'>
 </div>
