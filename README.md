@@ -5,7 +5,7 @@ CNNs are able to autonomously find the critical regions of the input data and di
 
 ## The proposed attention mechanism:
 <div align=center>
-<img src='imgs/attention.png' width='500'>
+<img src='imgs/main.png' width='500'>
 </div>
 
 ## Samples:
