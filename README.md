@@ -1,7 +1,7 @@
 # Person Re-identification: Implicitly Defining the Receptive Fields of Deep Learning Classification Frameworks:
 CNNs are able to autonomously find the critical regions of the input data and discriminate between foreground and background features. However, they demand huge volumes of data, which can be hard to collect and (particularly) annotate for usage in supervised tasks. In this paper, we develop an augmentation technique that empowers the network to improve this autonomous \emph{discovery skill}.
 
-* This project is is a forked version of https://github.com/michuanhaohao/reid-strong-baseline
+* We built our method on a re-id baseline available at https://github.com/michuanhaohao/reid-strong-baseline. 
 
 ## The proposed attention mechanism:
 <div align=center>
