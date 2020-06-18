@@ -2,8 +2,8 @@
 CNNs are able to autonomously find the critical regions of the input data and discriminate between foreground and background features. However, they demand huge volumes of data, which can be hard to collect and (particularly) annotate for usage in supervised tasks. In this paper, we develop an augmentation technique that empowers the network to improve this autonomous \emph{discovery skill}.
 
 # Paper:
-An Implicit Attention Mechanism for Deep Learning Pedestrian Re-identification Frameworks. ICIP2020, (Submitted).
-Paper link at arxiv [[https://to_be_inserted_soon]](https://arxiv.org/)
+An Implicit Attention Mechanism for Deep Learning Pedestrian Re-identification Frameworks.
+Paper link at arxiv (https://arxiv.org/)
 * This project is is a forked version of https://github.com/michuanhaohao/reid-strong-baseline
 
 ## The proposed attention mechanism:
